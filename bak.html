@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>漫画天地 - 亲子漫坊</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        img {
+            vertical-align: top;
+        }
+        
+        :root {
+            --primary-blue: #1a73e8;
+            --secondary-blue: #4285f4;
+            --light-blue: #e8f0fe;
+            --dark-blue: #0d47a1;
+            --accent-blue: #bbdefb;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --background: #f8f9fa;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            font-size: 2.2rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 主要内容区域 */
+        main {
+            min-height: calc(100vh - 180px);
+            padding: 2rem 0;
+        }
+        
+        /* 首页样式 */
+        .page-title {
+            text-align: center;
+            color: var(--dark-blue);
+            font-size: 2.2rem;
+            position: relative;
+            padding: 15px 0;
+        }
+        
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-blue);
+            border-radius: 2px;
+        }
+
+        .page-description {
+            text-align: center;
+            color: var(--text-secondary);
+            margin: 2rem 0;
+        }
+        
+        /* 漫画网格 */
+        .comics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .comic-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .comic-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .comic-cover {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        
+        .comic-info {
+            padding: 1.5rem;
+        }
+        
+        .comic-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-blue);
+        }
+        
+        .comic-author {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .comic-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .comic-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        
+        .tag {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        /* 详情页样式 */
+        .comic-detail-container {
+            display: none;
+        }
+        
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--dark-blue);
+        }
+        
+        .comic-detail {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px var(--shadow);
+        }
+        
+        .comic-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .detail-cover {
+            width: 190px;
+            height: 340px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .detail-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .detail-title {
+            font-size: 2rem;
+            color: var(--dark-blue);
+            margin-bottom: 0.8rem;
+        }
+        
+        .detail-author {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+        }
+        
+        .detail-description {
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* 漫画查看器 */
+        .comic-viewer {
+            margin-top: 2rem;
+        }
+        
+        .viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .viewer-title {
+            font-size: 1.5rem;
+            color: var(--dark-blue);
+        }
+        
+        .view-mode-selector {
+            display: flex;
+            gap: 0.5rem;
+            background-color: var(--light-blue);
+            padding: 6px;
+            border-radius: 8px;
+        }
+        
+        .mode-btn {
+            padding: 8px 16px;
+            background: none;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .mode-btn.active {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+        
+        .mode-btn:not(.active):hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* 切换模式 */
+        .carousel-container {
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f7fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .carousel-slide {
+            display: none;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .carousel-slide.active {
+            display: block;
+        }
+        
+        .carousel-image {
+            max-width: 100%;
+            max-height: 550px;
+            object-fit: contain;
+            border-radius: 6px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+        
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .carousel-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        
+        .carousel-btn:hover {
+            background-color: var(--dark-blue);
+        }
+        
+        .carousel-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .carousel-pagination {
+            display: flex;
+            align-items: center;
+        }
+        
+        .carousel-indicators {
+            display: flex;
+            gap: 0.8rem;
+        }
+        
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .indicator.active {
+            background-color: var(--primary-blue);
+        }
+        
+        .page-info {
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-left: 20px;
+        }
+        
+        /* 全部展示模式 */
+        .full-display-container {
+            display: none;
+        }
+        
+        .comic-pages {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .comic-page {
+            max-width: 100%;
+            max-height: 600px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: var(--dark-blue);
+            color: white;
+            padding: 1rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .copyright {
+            color: #bbdefb;
+        }
+
+        .icp-record {
+            text-align: center;
+            margin-top: 0.35rem;
+            font-size: 0.875rem;
+        }
+
+        .icp-record a {
+            color: #bbdefb;
+            text-decoration: none;
+        }
+
+        .icp-record a:hover {
+            text-decoration: underline;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.3rem;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent-blue);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 12px;
+            }
+
+            header {
+                padding: 0.55rem 0;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 0.4rem;
+            }
+
+            .logo {
+                font-size: 1.15rem;
+                gap: 8px;
+            }
+
+            .logo i {
+                font-size: 1.35rem;
+            }
+
+            nav ul {
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav a {
+                padding: 5px 10px;
+                font-size: 0.8125rem;
+            }
+
+            main {
+                min-height: calc(100vh - 100px);
+                padding: 0.85rem 0 1rem;
+            }
+
+            .page-title {
+                font-size: 1.3rem;
+                padding: 6px 0;
+            }
+
+            .page-title:after {
+                width: 48px;
+                height: 3px;
+            }
+
+            .page-description {
+                font-size: 0.8125rem;
+                margin: 0.65rem 0 0.85rem;
+                line-height: 1.5;
+            }
+
+            .comics-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+                margin-top: 0.65rem;
+            }
+
+            .comic-cover {
+                height: 220px;
+            }
+
+            .comic-info {
+                padding: 0.75rem 0.85rem;
+            }
+
+            .comic-title {
+                font-size: 0.98rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .comic-author {
+                font-size: 0.78rem;
+                margin-bottom: 0.45rem;
+            }
+
+            .comic-stats {
+                font-size: 0.72rem;
+                margin-bottom: 0.45rem;
+            }
+
+            .comic-tags {
+                margin-top: 0.45rem;
+                gap: 0.35rem;
+            }
+
+            .tag {
+                font-size: 0.68rem;
+                padding: 2px 7px;
+            }
+
+            .detail-header {
+                gap: 0.55rem;
+                padding: 0.85rem 0;
+                display: flex;
+                margin-bottom: 0;
+            }
+
+            .back-btn {
+                padding: 6px 12px;
+                font-size: 0.8125rem;
+                gap: 6px;
+            }
+
+            #detail-page .page-title {
+                font-size: 1.15rem;
+                padding: 0;
+                flex: 1;
+            }
+
+            .comic-detail {
+                padding: 0.85rem;
+                border-radius: 10px;
+            }
+
+            .comic-meta {
+                flex-direction: column;
+                gap: 0.85rem;
+                margin-bottom: 0.85rem;
+            }
+
+            .detail-cover {
+                width: 100%;
+                max-width: 220px;
+                height: auto;
+                aspect-ratio: 3/4;
+            }
+
+            .detail-info {
+                min-width: 0;
+            }
+
+            .detail-title {
+                font-size: 1.2rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .detail-author {
+                font-size: 0.85rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .detail-description {
+                font-size: 0.8125rem;
+                line-height: 1.55;
+                margin-bottom: 0.65rem;
+            }
+
+            .comic-viewer {
+                margin-top: 0.85rem;
+            }
+
+            .viewer-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.55rem;
+                margin-bottom: 0.65rem;
+                padding-bottom: 0.55rem;
+            }
+
+            .viewer-title {
+                font-size: 1rem;
+            }
+
+            .view-mode-selector {
+                justify-content: center;
+                padding: 4px;
+            }
+
+            .mode-btn {
+                padding: 5px 10px;
+                font-size: 0.78rem;
+                flex: 1;
+            }
+
+            .carousel-container {
+                min-height: 0;
+                padding: 8px;
+                border-radius: 8px;
+            }
+
+            .carousel-image {
+                max-height: min(52vh, 380px);
+            }
+
+            .carousel-controls {
+                gap: 0.65rem;
+                margin-top: 0.65rem;
+            }
+
+            .carousel-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 0.95rem;
+            }
+
+            .carousel-pagination {
+                flex-direction: column;
+                align-items: center;
+                flex: 1;
+                gap: 0.35rem;
+            }
+
+            .carousel-indicators {
+                gap: 0.4rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .indicator {
+                width: 7px;
+                height: 7px;
+            }
+
+            .page-info {
+                margin-left: 0;
+                font-size: 0.75rem;
+            }
+
+            .comic-pages {
+                gap: 0.85rem;
+            }
+
+            .comic-page {
+                max-height: none;
+            }
+
+            footer {
+                margin-top: 1.25rem;
+                padding: 0.65rem 0;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .footer-logo {
+                font-size: 1rem;
+            }
+
+            .copyright {
+                font-size: 0.72rem;
+                line-height: 1.45;
+            }
+
+            .icp-record {
+                font-size: 0.65rem;
+                margin-top: 0.2rem;
+            }
+
+            .social-links {
+                gap: 0.5rem;
+            }
+
+            .social-links a {
+                font-size: 0.8125rem;
+            }
+
+            .empty-state {
+                padding: 1.25rem 0.85rem;
+            }
+
+            .empty-state i {
+                font-size: 2rem;
+                margin-bottom: 0.45rem;
+            }
+
+            .empty-state p {
+                font-size: 0.8125rem;
+            }
+        }
+        
+        /* 工具类 */
+        .hidden {
+            display: none;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+        
+        /* 大图预览模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+        
+        .modal-image-stage {
+            width: 100%;
+            margin: 60px auto 0;
+            animation: modalStageFadeIn 0.3s ease;
+        }
+
+        @keyframes modalStageFadeIn {
+            from { opacity: 0.65; }
+            to { opacity: 1; }
+        }
+
+        /* 所有页一次插入 DOM，横向滑动靠原生滚动 + scroll-snap */
+        .modal-scrollport {
+            display: flex;
+            flex-flow: row nowrap;
+            width: 100%;
+            max-height: calc(100vh - 140px);
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            touch-action: pan-x pan-y;
+        }
+
+        .modal-scrollport::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modal-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            min-width: 100%;
+            max-height: calc(100vh - 140px);
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            box-sizing: border-box;
+            padding: 0 6px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal-slide-img {
+            display: block;
+            max-width: 100%;
+            max-height: calc(100vh - 160px);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .modal-image-stage {
+                animation: none;
+            }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: #bbdefb;
+        }
+        
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 50px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-nav:hover {
+            opacity: 1;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .modal-prev {
+            left: 30px;
+        }
+        
+        .modal-next {
+            right: 30px;
+        }
+        
+        .modal-info {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .modal-image-stage {
+                margin: 44px auto 0;
+            }
+
+            .modal-scrollport,
+            .modal-slide {
+                max-height: calc(100vh - 100px);
+            }
+
+            .modal-slide-img {
+                max-height: calc(100vh - 112px);
+            }
+
+            .close-modal {
+                top: 10px;
+                right: 12px;
+                font-size: 30px;
+            }
+
+            .modal-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .modal-prev {
+                left: 6px;
+            }
+
+            .modal-next {
+                right: 6px;
+            }
+
+            .modal-info {
+                bottom: 10px;
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <span>亲子漫坊</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 首页内容 -->
+        <div id="home-page">
+            <h1 class="page-title">漫画推荐</h1>
+            <p class="page-description">点击任意漫画查看详情，体验沉浸式阅读</p>
+            
+            <div class="comics-grid" id="comics-grid">
+                <!-- 漫画卡片将通过JavaScript动态生成 -->
+            </div>
+        </div>
+        
+        <!-- 漫画详情页 -->
+        <div id="detail-page" class="comic-detail-container">
+            <div class="detail-header">
+                <a href="#" class="back-btn" id="back-to-home">
+                    <i class="fas fa-arrow-left"></i>
+                    返回
+                </a>
+                <h2 class="page-title" id="detail-page-title">漫画详情</h2>
+            </div>
+            
+            <div class="comic-detail">
+                <div class="comic-meta">
+                    <div class="image-wrapper">
+                        <img src="" alt="漫画封面" class="detail-cover" id="detail-cover">
+                    </div>
+                    <div class="detail-info">
+                        <h1 class="detail-title" id="detail-title">漫画标题</h1>
+                        <p class="detail-author" id="detail-author">作者：未知</p>
+                        <p class="detail-description" id="detail-description">漫画简介将在这里显示...</p>
+                        <div class="comic-stats">
+                            <span id="update-date">更新：未知</span>
+                        </div>
+                        <div class="comic-tags" id="detail-tags">
+                            <!-- 标签将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comic-viewer">
+                    <div class="viewer-header">
+                        <h3 class="viewer-title">阅读漫画</h3>
+                        <div class="view-mode-selector">
+                            <button class="mode-btn active" id="carousel-mode">切换模式</button>
+                            <button class="mode-btn" id="full-mode">全部展示</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 切换模式 -->
+                    <div id="carousel-viewer">
+                        <div class="carousel-container" id="carousel-container">
+                            <!-- 轮播图幻灯片将通过JavaScript动态生成 -->
+                            <div class="empty-state" id="carousel-empty">
+                                <i class="fas fa-book-open"></i>
+                                <p>暂无漫画内容</p>
+                            </div>
+                        </div>
+                        
+                        <div class="carousel-controls">
+                            <button class="carousel-btn" id="prev-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            
+                            <div class="carousel-pagination">
+                                <div class="carousel-indicators" id="indicators">
+                                    <!-- 指示器将通过JavaScript动态生成 -->
+                                </div>
+                                
+                                <span class="page-info">
+                                    <span id="current-page">1</span> / <span id="total-pages">0</span>
+                                </span>
+                            </div>
+                            
+                            <button class="carousel-btn" id="next-btn" disabled>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 全部展示模式 -->
+                    <div class="full-display-container" id="full-viewer">
+                        <div class="comic-pages" id="comic-pages">
+                            <!-- 全部页面将通过JavaScript动态生成 -->
+                            <div class="empty-state">
+                                <i class="fas fa-book-open"></i>
+                                <p>暂无漫画内容</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-book-open"></i> 亲子漫坊
+            </div>
+            <div class="copyright">
+                &copy; 2026 亲子漫坊. 所有漫画版权归原作者所有.
+            </div>
+            <div class="icp-record">
+                <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">沪ICP备2021007864号-1</a>
+            </div>
+            <div class="social-links">
+                <a href="https://songguoshike.com/" target="_blank">感谢松果时刻</a>
+                <!-- <a href="#"><i class="fab fa-weibo"></i></a>
+                <a href="#"><i class="fab fa-weixin"></i></a>
+                <a href="#"><i class="fab fa-qq"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a> -->
+            </div>
+        </div>
+    </footer>
+
+    <!-- 大图预览模态框 -->
+    <div id="image-modal" class="modal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-nav modal-prev">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="modal-image-stage" id="modal-image-stage">
+            <div class="modal-scrollport" id="modal-scrollport" aria-label="漫画大图滑动浏览"></div>
+        </div>
+        <div class="modal-nav modal-next">
+            <i class="fas fa-chevron-right"></i>
+        </div>
+        <div class="modal-info">
+            <span id="modal-page-info">1 / 5</span>
+        </div>
+    </div>
+
+    <script>
+        // 漫画数据 - 每张漫画有不同的页数
+        const comicsData = [
+            {
+                id: 1,
+                title: "爸爸和女儿",
+                author: "爸爸和女儿",
+                description: "女儿在跳舞让爸爸看，爸爸却一直在玩手机",
+                tags: ["亲子"],
+                pages: [
+                    "process-img/1/IMG_5837.JPG",
+                    "process-img/1/IMG_5838.JPG",
+                    "process-img/1/IMG_5839.JPG",
+                    "process-img/1/IMG_5840.JPG",
+                    "process-img/1/IMG_5841.JPG"
+                ],
+                updateDate: "2023-05-28"
+            },
+            {
+                id: 2,
+                title: "女儿的体谅",
+                author: "爸爸和女儿",
+                description: "普通大学生林晓偶然进入了一个充满魔法与神秘生物的异世界。在这个世界里，她发现自己拥有罕见的元素魔法天赋。随着她对这个世界了解的深入，一个关于世界起源的巨大秘密逐渐浮出水面。",
+                tags: ["亲子"],
+                pages: [
+                    "process-img/2/IMG_5842.JPG",
+                    "process-img/2/IMG_5843.JPG",
+                    "process-img/2/IMG_5844.JPG",
+                    "process-img/2/IMG_5845.JPG",
+                    "process-img/2/IMG_5846.JPG",
+                    "process-img/2/IMG_5847.JPG",
+                    "process-img/2/IMG_5848.JPG"
+                ],
+                updateDate: "2023-05-28"
+            },
+            {
+                id: 3,
+                title: "有一种热是女儿觉得你热",
+                author: "爸爸和女儿",
+                description: "在犯罪率居高不下的雾都，前刑警陆明因一次意外获得了看见死者最后记忆的能力。他利用这个能力私下调查悬案，却发现自己被卷入了一个涉及城市高层的巨大阴谋。",
+                tags: ["亲子"],
+                pages: [
+                    "process-img/3/IMG_5849.JPG",
+                    "process-img/3/IMG_5850.JPG",
+                    "process-img/3/IMG_5851.JPG",
+                    "process-img/3/IMG_5852.JPG",
+                    "process-img/3/IMG_5853.JPG"
+                ],
+                updateDate: "2023-05-28"
+            },
+            {
+                id: 4,
+                title: "这棉花糖是认真的吗",
+                author: "爸爸和女儿",
+                description: "年轻厨师李维继承了祖父留下的神秘食谱，开始了寻找传说中食材的环球之旅。从喜马拉雅山的雪莲到亚马逊雨林的奇异果实，每一段旅程都是一次味觉与冒险的盛宴。",
+                tags: ["亲子"],
+                pages: [
+                    "process-img/4/IMG_5854.JPG",
+                    "process-img/4/IMG_5855.JPG",
+                    "process-img/4/IMG_5856.JPG",
+                    "process-img/4/IMG_5857.JPG",
+                    "process-img/4/IMG_5858.JPG",
+                    "process-img/4/IMG_5859.JPG"
+                ],
+                updateDate: "2023-07-10"
+            },
+            {
+                id: 5,
+                title: "这道歉听着不对劲",
+                author: "爸爸和女儿",
+                description: "年轻厨师李维继承了祖父留下的神秘食谱，开始了寻找传说中食材的环球之旅。从喜马拉雅山的雪莲到亚马逊雨林的奇异果实，每一段旅程都是一次味觉与冒险的盛宴。",
+                tags: ["亲子"],
+                pages: [
+                    "process-img/5/IMG_5860.JPG",
+                    "process-img/5/IMG_5861.JPG",
+                    "process-img/5/IMG_5862.JPG",
+                    "process-img/5/IMG_5863.JPG",
+                    "process-img/5/IMG_5864.JPG",
+                    "process-img/5/IMG_5865.JPG"
+                ],
+                updateDate: "2023-07-10"
+            },
+            {
+                id: 6,
+                title: "逻辑鬼才",
+                author: "爸爸和女儿",
+                description: "年轻厨师李维继承了祖父留下的神秘食谱，开始了寻找传说中食材的环球之旅。从喜马拉雅山的雪莲到亚马逊雨林的奇异果实，每一段旅程都是一次味觉与冒险的盛宴。",
+                tags: ["亲子"],
+                pages: [
+                    "process-img/6/IMG_5866.JPG",
+                    "process-img/6/IMG_5867.JPG",
+                    "process-img/6/IMG_5868.JPG",
+                    "process-img/6/IMG_5869.JPG",
+                    "process-img/6/IMG_5870.JPG"
+                ],
+                updateDate: "2023-07-10"
+            },
+            {
+                id: 7,
+                title: "最强情敌",
+                author: "爸爸和女儿",
+                description: "年轻厨师李维继承了祖父留下的神秘食谱，开始了寻找传说中食材的环球之旅。从喜马拉雅山的雪莲到亚马逊雨林的奇异果实，每一段旅程都是一次味觉与冒险的盛宴。",
+                tags: ["亲子"],
+                pages: [
+                    "process-img/7/IMG_5871.JPG",
+                    "process-img/7/IMG_5872.JPG",
+                    "process-img/7/IMG_5873.JPG",
+                    "process-img/7/IMG_5874.JPG",
+                    "process-img/7/IMG_5875.JPG",
+                    "process-img/7/IMG_5876.JPG"
+                ],
+                updateDate: "2023-07-10"
+            },
+            {
+                id: 8,
+                title: "失控的心",
+                author: "爸爸和女儿",
+                description: "年轻厨师李维继承了祖父留下的神秘食谱，开始了寻找传说中食材的环球之旅。从喜马拉雅山的雪莲到亚马逊雨林的奇异果实，每一段旅程都是一次味觉与冒险的盛宴。",
+                tags: ["亲子"],
+                pages: [
+                    "process-img/8/IMG_5877.JPG",
+                    "process-img/8/IMG_5878.JPG",
+                    "process-img/8/IMG_5879.JPG",
+                    "process-img/8/IMG_5880.JPG",
+                    "process-img/8/IMG_5881.JPG",
+                    "process-img/8/IMG_5882.JPG",
+                    "process-img/8/IMG_5883.JPG"
+                ],
+                updateDate: "2023-07-10"
+            },
+            {
+                id: 9,
+                title: "这是我自己的嘴巴",
+                author: "爸爸和女儿",
+                description: "年轻厨师李维继承了祖父留下的神秘食谱，开始了寻找传说中食材的环球之旅。从喜马拉雅山的雪莲到亚马逊雨林的奇异果实，每一段旅程都是一次味觉与冒险的盛宴。",
+                tags: ["亲子"],
+                pages: [
+                    "process-img/9/IMG_5884.JPG",
+                    "process-img/9/IMG_5885.JPG",
+                    "process-img/9/IMG_5886.JPG",
+                    "process-img/9/IMG_5887.JPG",
+                    "process-img/9/IMG_5888.JPG"
+                ],
+                updateDate: "2023-07-10"
+            },
+            {
+                id: 10,
+                title: "我猜你想抱我",
+                author: "爸爸和女儿",
+                description: "年轻厨师李维继承了祖父留下的神秘食谱，开始了寻找传说中食材的环球之旅。从喜马拉雅山的雪莲到亚马逊雨林的奇异果实，每一段旅程都是一次味觉与冒险的盛宴。",
+                tags: ["亲子"],
+                pages: [
+                    "process-img/10/IMG_5889.JPG",
+                    "process-img/10/IMG_5890.JPG",
+                    "process-img/10/IMG_5891.JPG",
+                    "process-img/10/IMG_5892.JPG",
+                    "process-img/10/IMG_5893.JPG"
+                ],
+                updateDate: "2023-07-10"
+            },
+        ];
+        
+        // 当前查看的漫画和页面索引
+        let currentComic = null;
+        let currentPageIndex = 0;
+        let currentImageSet = []; // 存储当前显示的图片集合
+        let currentImageIndex = 0; // 当前预览的图片索引
+        let currentModalTitle = '';
+
+        function prefersReducedMotion() {
+            return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        }
+
+        // DOM元素
+        const homePage = document.getElementById('home-page');
+        const detailPage = document.getElementById('detail-page');
+        const comicsGrid = document.getElementById('comics-grid');
+        const backToHomeBtn = document.getElementById('back-to-home');
+        const carouselModeBtn = document.getElementById('carousel-mode');
+        const fullModeBtn = document.getElementById('full-mode');
+        const carouselViewer = document.getElementById('carousel-viewer');
+        const fullViewer = document.getElementById('full-viewer');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const currentPageElement = document.getElementById('current-page');
+        const totalPagesElement = document.getElementById('total-pages');
+        const indicatorsContainer = document.getElementById('indicators');
+        const comicPagesContainer = document.getElementById('comic-pages');
+        const carouselContainer = document.getElementById('carousel-container');
+        const carouselEmpty = document.getElementById('carousel-empty');
+        const updateDateElement = document.getElementById('update-date');
+        const imageModal = document.getElementById('image-modal');
+        const modalScrollport = document.getElementById('modal-scrollport');
+        const closeModal = document.querySelector('.close-modal');
+        const modalPrev = document.querySelector('.modal-prev');
+        const modalNext = document.querySelector('.modal-next');
+        const modalPageInfo = document.getElementById('modal-page-info');
+        
+        // 初始化首页漫画列表
+        function renderComicsList() {
+            comicsGrid.innerHTML = '';
+            
+            comicsData.forEach(comic => {
+                const comicCard = document.createElement('div');
+                comicCard.className = 'comic-card';
+                comicCard.dataset.id = comic.id;
+                
+                comicCard.innerHTML = `
+                    <div class="image-wrapper">
+                        <img src="${comic.pages[0]}" alt="${comic.title}" class="comic-cover">
+                    </div>
+                    <div class="comic-info">
+                        <h3 class="comic-title">${comic.title}</h3>
+                        <p class="comic-author">作者：${comic.author}</p>
+                        <div class="comic-stats">
+                            <span>${comic.pages.length}页</span>
+                            <span>${comic.updateDate}</span>
+                        </div>
+                        <div class="comic-tags">
+                            ${comic.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                // 添加封面点击事件
+                const coverImg = comicCard.querySelector('.comic-cover');
+                coverImg.addEventListener('click', (e) => {
+                    // e.stopPropagation();
+                    // openModal([comic.pages[0]], 0, comic.title);
+                });
+                
+                comicCard.addEventListener('click', () => showComicDetail(comic.id));
+                comicsGrid.appendChild(comicCard);
+            });
+        }
+        
+        // 显示漫画详情
+        function showComicDetail(comicId) {
+            const comic = comicsData.find(c => c.id === comicId);
+            if (!comic) return;
+            
+            currentComic = comic;
+            currentPageIndex = 0;
+            
+            // 更新详情页信息
+            document.getElementById('detail-cover').src = comic.pages[0];
+            document.getElementById('detail-cover').alt = comic.title;
+            document.getElementById('detail-title').textContent = comic.title;
+            document.getElementById('detail-author').textContent = `作者：${comic.author}`;
+            document.getElementById('detail-description').textContent = comic.description;
+            document.getElementById('detail-page-title').textContent = comic.title;
+            
+            // 更新统计信息
+            updateDateElement.textContent = `更新：${comic.updateDate}`;
+            
+            // 更新标签
+            const tagsContainer = document.getElementById('detail-tags');
+            tagsContainer.innerHTML = comic.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            
+            // 添加封面点击事件
+            const detailCover = document.getElementById('detail-cover');
+            detailCover.onclick = (e) => {
+                // e.stopPropagation();
+                // openModal([comic.pages[0]], 0, comic.title);
+            };
+            
+            // 动态生成轮播图
+            generateCarouselSlides();
+            
+            // 更新指示器
+            updateIndicators();
+            
+            // 更新全部展示模式
+            updateFullViewer();
+            
+            // 更新页码信息
+            updatePageInfo();
+            
+            // 更新按钮状态
+            updateButtonStates();
+            
+            // 切换到详情页
+            homePage.style.display = 'none';
+            detailPage.style.display = 'block';
+        }
+        
+        // 动态生成轮播图幻灯片
+        function generateCarouselSlides() {
+            // 清空轮播容器
+            carouselContainer.innerHTML = '';
+            
+            if (currentComic.pages.length === 0) {
+                carouselContainer.appendChild(carouselEmpty.cloneNode(true));
+                return;
+            }
+            
+            // 创建幻灯片
+            currentComic.pages.forEach((page, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                if (index === 0) slide.classList.add('active');
+                
+                const img = document.createElement('img');
+                img.src = page;
+                img.alt = `${currentComic.title} - 第${index+1}页`;
+                img.className = 'carousel-image';
+                
+                // 添加点击事件
+                img.addEventListener('click', () => {
+                    openModal(currentComic.pages, index, currentComic.title);
+                });
+                
+                slide.appendChild(img);
+                carouselContainer.appendChild(slide);
+            });
+        }
+        
+        // 更新指示器
+        function updateIndicators() {
+            indicatorsContainer.innerHTML = '';
+            
+            if (!currentComic || currentComic.pages.length === 0) return;
+            
+            for (let i = 0; i < currentComic.pages.length; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = `indicator ${i === currentPageIndex ? 'active' : ''}`;
+                indicator.dataset.index = i;
+                
+                indicator.addEventListener('click', () => {
+                    goToPage(i);
+                });
+                
+                indicatorsContainer.appendChild(indicator);
+            }
+        }
+        
+        // 更新全部展示模式
+        function updateFullViewer() {
+            comicPagesContainer.innerHTML = '';
+            
+            if (!currentComic || currentComic.pages.length === 0) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-state';
+                emptyState.innerHTML = `
+                    <i class="fas fa-book-open"></i>
+                    <p>暂无漫画内容</p>
+                `;
+                comicPagesContainer.appendChild(emptyState);
+                return;
+            }
+            
+            currentComic.pages.forEach((page, index) => {
+                const pageImg = document.createElement('img');
+                pageImg.src = page;
+                pageImg.alt = `${currentComic.title} - 第${index+1}页`;
+                pageImg.className = 'comic-page';
+                
+                // 添加点击事件
+                pageImg.addEventListener('click', () => {
+                    openModal(currentComic.pages, index, currentComic.title);
+                });
+                
+                comicPagesContainer.appendChild(pageImg);
+            });
+        }
+        
+        function syncModalUiFromScroll() {
+            if (!imageModal.classList.contains('show') || !currentImageSet.length) return;
+            const w = modalScrollport.clientWidth;
+            if (w <= 0) return;
+            const idx = Math.round(modalScrollport.scrollLeft / w);
+            const clamped = Math.max(0, Math.min(idx, currentImageSet.length - 1));
+            currentImageIndex = clamped;
+            modalPageInfo.textContent = `${currentImageIndex + 1} / ${currentImageSet.length}`;
+        }
+
+        function modalScrollToIndex(i, smooth) {
+            if (!modalScrollport || currentImageSet.length === 0) return;
+            const w = modalScrollport.clientWidth;
+            const clamped = Math.max(0, Math.min(i, currentImageSet.length - 1));
+            const useSmooth = smooth && !prefersReducedMotion();
+            modalScrollport.scrollTo({
+                left: clamped * w,
+                behavior: useSmooth ? 'smooth' : 'auto'
+            });
+        }
+
+        // 打开大图：一次性插入全部图片，横向手势 = 原生滚动，不再改 src
+        function openModal(imageSet, index, title) {
+            currentImageSet = imageSet;
+            currentImageIndex = index;
+            currentModalTitle = title;
+
+            modalScrollport.innerHTML = '';
+            imageSet.forEach((src, i) => {
+                const slide = document.createElement('div');
+                slide.className = 'modal-slide';
+                const img = document.createElement('img');
+                img.className = 'modal-slide-img';
+                img.src = src;
+                img.alt = `${title} - 第${i + 1}页`;
+                img.draggable = false;
+                slide.appendChild(img);
+                modalScrollport.appendChild(slide);
+            });
+
+            imageModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    modalScrollToIndex(index, false);
+                    syncModalUiFromScroll();
+                });
+            });
+        }
+
+        function closeImageModal() {
+            modalScrollport.innerHTML = '';
+            currentImageSet = [];
+            imageModal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function prevImage() {
+            const w = modalScrollport.clientWidth;
+            if (w <= 0) return;
+            const idx = Math.round(modalScrollport.scrollLeft / w);
+            modalScrollToIndex(idx - 1, true);
+        }
+
+        function nextImage() {
+            const w = modalScrollport.clientWidth;
+            if (w <= 0) return;
+            const idx = Math.round(modalScrollport.scrollLeft / w);
+            modalScrollToIndex(idx + 1, true);
+        }
+        
+        // 更新页码信息
+        function updatePageInfo() {
+            if (!currentComic) return;
+            
+            currentPageElement.textContent = currentPageIndex + 1;
+            totalPagesElement.textContent = currentComic.pages.length;
+        }
+        
+        // 更新按钮状态
+        function updateButtonStates() {
+            if (!currentComic || currentComic.pages.length === 0) {
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+                return;
+            }
+            
+            prevBtn.disabled = currentPageIndex === 0;
+            nextBtn.disabled = currentPageIndex === currentComic.pages.length - 1;
+        }
+        
+        // 跳转到指定页面
+        function goToPage(pageIndex) {
+            if (!currentComic || pageIndex < 0 || pageIndex >= currentComic.pages.length) return;
+            
+            // 更新当前页面索引
+            currentPageIndex = pageIndex;
+            
+            // 更新轮播图显示
+            const slides = document.querySelectorAll('.carousel-slide');
+            slides.forEach((slide, index) => {
+                if (index === pageIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            
+            // 更新指示器
+            const indicators = document.querySelectorAll('.indicator');
+            indicators.forEach((indicator, index) => {
+                if (index === pageIndex) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+            
+            // 更新页码信息
+            updatePageInfo();
+            
+            // 更新按钮状态
+            updateButtonStates();
+        }
+        
+        // 切换到上一页
+        function prevPage() {
+            if (currentPageIndex > 0) {
+                goToPage(currentPageIndex - 1);
+            }
+        }
+        
+        // 切换到下一页
+        function nextPage() {
+            if (currentPageIndex < currentComic.pages.length - 1) {
+                goToPage(currentPageIndex + 1);
+            }
+        }
+        
+        // 切换查看模式
+        function switchViewMode(mode) {
+            if (mode === 'carousel') {
+                carouselModeBtn.classList.add('active');
+                fullModeBtn.classList.remove('active');
+                carouselViewer.style.display = 'block';
+                fullViewer.style.display = 'none';
+            } else {
+                carouselModeBtn.classList.remove('active');
+                fullModeBtn.classList.add('active');
+                carouselViewer.style.display = 'none';
+                fullViewer.style.display = 'block';
+            }
+        }
+        
+        // 返回首页
+        function goToHome() {
+            homePage.style.display = 'block';
+            detailPage.style.display = 'none';
+            closeImageModal(); // 关闭可能存在的模态框
+        }
+        
+        // 初始化事件监听
+        function initEventListeners() {
+            // 返回首页按钮
+            backToHomeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                goToHome();
+            });
+            
+            // 切换模式按钮
+            carouselModeBtn.addEventListener('click', () => {
+                switchViewMode('carousel');
+            });
+            
+            fullModeBtn.addEventListener('click', () => {
+                switchViewMode('full');
+            });
+            
+            // 轮播控制按钮
+            prevBtn.addEventListener('click', prevPage);
+            nextBtn.addEventListener('click', nextPage);
+            
+            // 键盘控制（大图打开时交给模态，避免和详情轮播冲突）
+            document.addEventListener('keydown', (e) => {
+                if (detailPage.style.display !== 'block') return;
+                if (imageModal.classList.contains('show')) return;
+
+                if (e.key === 'ArrowLeft') {
+                    prevPage();
+                } else if (e.key === 'ArrowRight') {
+                    nextPage();
+                }
+            });
+            
+            // 模态框事件
+            closeModal.addEventListener('click', closeImageModal);
+            modalPrev.addEventListener('click', prevImage);
+            modalNext.addEventListener('click', nextImage);
+            
+            // 点击模态框背景关闭
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal) {
+                    closeImageModal();
+                }
+            });
+
+            let modalScrollRaf = 0;
+            modalScrollport.addEventListener(
+                'scroll',
+                () => {
+                    if (!imageModal.classList.contains('show')) return;
+                    cancelAnimationFrame(modalScrollRaf);
+                    modalScrollRaf = requestAnimationFrame(syncModalUiFromScroll);
+                },
+                { passive: true }
+            );
+
+            modalScrollport.addEventListener('scrollend', syncModalUiFromScroll);
+
+            window.addEventListener('resize', () => {
+                if (!imageModal.classList.contains('show') || !currentImageSet.length) return;
+                modalScrollToIndex(currentImageIndex, false);
+                syncModalUiFromScroll();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (!imageModal.classList.contains('show')) return;
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevImage();
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    nextImage();
+                }
+            });
+            
+            // ESC键关闭模态框
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && imageModal.classList.contains('show')) {
+                    closeImageModal();
+                }
+            });
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            renderComicsList();
+            initEventListeners();
+        });
+    </script>
+</body>
+</html>

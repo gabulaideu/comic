@@ -1,0 +1,34 @@
+---
+description: 页面相关修改仅动 bak.html；确认后再生成 index.html
+alwaysApply: true
+---
+
+# 仅此一份源文件：`bak.html`
+
+凡涉及**页面**（HTML 结构、内联 CSS/JS、文案、漫画数据、备案等）的修改：
+
+- **只编辑 `bak.html`**。
+- **不要**去改 `index.html`、`bak2.html`、`remote-img.html` 以及仓库里其他任何 HTML 备份/副本；用户未明确要求时，**不必**帮其同步这些文件。
+- **不要**为省事直接改压缩后的 `index.html`（会与源脱节）。
+
+用户若点名要改别的文件（例如「同步 remote-img.html」），再按其指示处理。
+
+---
+
+## 生成发布用 `index.html`
+
+1. 改完 `bak.html` 后说明摘要，**默认等用户确认**（如「确定」「可以生成」「OK」）。
+2. 用户确认后在项目根执行：
+
+```bash
+npx --yes html-minifier-terser@7.2.0 bak.html -o index.html --collapse-whitespace --remove-comments --minify-css true --minify-js true
+```
+
+3. 若用户在同一句里要求「直接生成 / 不用确认」，可在同一轮执行上述命令。
+
+---
+
+## 例外（与页面源码无关）
+
+- 用户说 **「发布」** 时按 `vercel-publish` 规则部署。
+- 修改 `.cursor/rules`、README 等非页面资产时，按用户具体指令即可。
